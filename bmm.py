@@ -48,10 +48,11 @@ def get_aps(conds, apr):
   """
     >>> get_aps(np.asarray( [[0.2, 0.8],[0.5, 0.5]] ), np.asarray([0.25, 0.75]))
     array([[0.07692308, 0.92307692],
-          [0.25      , 0.75      ]])
+           [0.25      , 0.75      ]])
 
     >>> get_aps(np.asarray( [[0.5, 0.5],[0, 1]] ), np.asarray([0.5, 0.5]))
-    array([[0.5, 0.5],[0. , 1. ]])
+    array([[0.5, 0.5],
+           [0. , 1. ]])
 """
   temp = conds[:, 0]*apr[0] + conds[:, 1]*apr[1]
   aps_a = (conds[:, 0]*apr[0])/temp
