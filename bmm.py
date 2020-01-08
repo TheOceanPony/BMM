@@ -108,8 +108,9 @@ for i in range(0, 20):
     #p_kz
     p_kz = 1 - get_aps(p_zk, Pk) 
   
-im = Image.fromarray(np.uint8(p[1] * 255) , 'L')
-im.show()
+if __name__ == "__main__":
+    im = Image.fromarray(np.uint8(p[1] * 255) , 'L')
+    im.show()
 
-im = Image.fromarray(np.uint8(p[0] * 255) , 'L')
-im.show()
+    im = Image.fromarray(np.uint8(p[0] * 255) , 'L')
+    im.show()
