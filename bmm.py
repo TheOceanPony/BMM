@@ -17,7 +17,52 @@ def get_random_probs(ds_size, clusters_amount):
     prob_matrix = rand_matrix/sum_along_row
     return prob_matrix
   
+    
+def get_cond_prob(x, p):
+  p = np.expand_dims(p, axis=0)
+  p = np.repeat(p, repeats=x.shape[0], axis=0)
+  p = p.reshape((p.shape[0], p.shape[1], -1))
   
+  x = np.expand_dims(x, axis=1)
+  x = np.repeat(x, repeats=2, axis=1)
+  x = x.reshape((x.shape[0], x.shape[1], -1))
+  
+  a = np.power(p, x).prod(axis=-1)
+  b = np.power(1 - p, (1 - x)).prod(axis=-1)
+  return np.multiply(a, b)
+
+
+def get_apr(histo):
+    p = histo.mean(axis=0)
+    return p
+
+
+def get_aps(conds, apr):
+  temp = conds[:, 0]*apr[0] + conds[:, 1]*apr[1]
+  aps_a = (conds[:, 0]*apr[0])/temp
+  aps_b = (conds[:, 1]*apr[1])/temp
+  return np.stack((aps_a, aps_b), axis=1)
+
+
+def get_p(apr_probs):
+  p = np.zeros((2, 28, 28))
+
+  for i in range(0, 28):
+    for j in range(0, 28):
+      a1 = 0
+      a2 = 0
+      b1 = 0
+      b2 = 0
+      for z in range(0, N):
+        a1 = a1 + album[z, i, j] * apr_probs[z, 0]
+        a2 = a2 + apr_probs[z, 0]
+        b1 = b1 + album[z, i, j] * apr_probs[z, 1]
+        b2 = b2 + apr_probs[z, 1]
+      p[0, i, j] = a1 / a2
+      p[1, i, j] = b1 / b2
+  return p  
+
+
 
 # Loading the data
 df = pd.read_csv("dataset/ds81.csv")
