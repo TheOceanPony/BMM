@@ -79,36 +79,36 @@ def get_p(apr_probs):
   return p  
 
 
-
-# Loading the data
-df = pd.read_csv("dataset/ds81.csv")
-N = df.shape[0]
-
-# Creating an "album"
-album = np.zeros((N, 28, 28))
-for i in range(0, N):
-  temp = np.reshape( df[i:i+1].to_numpy(), (-1, 28))
-  temp = (temp>127).astype(np.uint8)
-  album[i] = temp
-  
-# Initial
-p_kz = get_random_probs(N, 2)
-
-
-for i in range(0, 20):
-    # P(K)
-    Pk = get_apr(p_kz)
-
-    #p_kij
-    p = get_p(p_kz)
-
-    #p(z | k)
-    p_zk = get_cond_prob(album, p)
-
-    #p_kz
-    p_kz = 1 - get_aps(p_zk, Pk) 
-  
 if __name__ == "__main__":
+    # Loading the data
+    df = pd.read_csv("dataset/ds81.csv")
+    N = df.shape[0]
+
+    # Creating an "album"
+    album = np.zeros((N, 28, 28))
+    for i in range(0, N):
+        temp = np.reshape( df[i:i+1].to_numpy(), (-1, 28))
+        temp = (temp>127).astype(np.uint8)
+        album[i] = temp
+  
+    # Initial
+    p_kz = get_random_probs(N, 2)
+
+
+    for i in range(0, 20):
+        # P(K)
+        Pk = get_apr(p_kz)
+
+        #p_kij
+        p = get_p(p_kz)
+
+        #p(z | k)
+        p_zk = get_cond_prob(album, p)
+
+        #p_kz
+        p_kz = 1 - get_aps(p_zk, Pk) 
+  
+
     im = Image.fromarray(np.uint8(p[1] * 255) , 'L')
     im.show()
 
